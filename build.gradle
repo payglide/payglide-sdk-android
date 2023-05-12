@@ -1,0 +1,67 @@
+buildscript {
+    ext.kotlin_version = '1.6.0'
+    ext.coroutines_version = '1.6.0'
+    ext.kotlinter_version = '0.47.0'
+    ext.junit_version = '5.3.1'
+
+    repositories {
+        maven { url "https://repo1.maven.org/maven2" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
+
+    configurations.classpath {
+        resolutionStrategy {
+            force(
+                "com.pinterest.ktlint:ktlint-core:$kotlinter_version",
+                "com.pinterest.ktlint:ktlint-reporter-checkstyle:$kotlinter_version",
+                "com.pinterest.ktlint:ktlint-reporter-json:$kotlinter_version",
+                "com.pinterest.ktlint:ktlint-reporter-html:$kotlinter_version",
+                "com.pinterest.ktlint:ktlint-reporter-plain:$kotlinter_version",
+                "com.pinterest.ktlint:ktlint-reporter-sarif:$kotlinter_version",
+                "com.pinterest.ktlint:ktlint-ruleset-standard:$kotlinter_version"
+            )
+        }
+    }
+}
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.8.21"
+    id "org.jetbrains.kotlin.plugin.serialization" version "1.8.21"
+    id "org.jmailen.kotlinter" version "3.13.0"
+}
+
+group 'xyz.payglide'
+version '0.1.0'
+
+wrapper {
+    gradleVersion = '6.8.3'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
+    implementation "com.squareup.okhttp3:okhttp:4.9.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "io.mockk:mockk:1.12.4"
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    }
+}
