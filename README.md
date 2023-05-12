@@ -51,6 +51,27 @@ Example response in json format:
 }
 ```
 
+### **getSessionById**
+> PaymentSession getSessionById(sessionId)
+
+Find session by ID
+
+Returns the session information
+
+```kotlin
+val sessionId : kotlin.String = sessionId_example // kotlin.String | ID of session to return
+try {
+    val result : PaymentSession = client.getSessionById(sessionId)
+    println(result)
+} catch (e: ClientException) {
+    println("4xx response calling PayGlideClient#getSessionById")
+    e.printStackTrace()
+} catch (e: ServerException) {
+    println("5xx response calling PayGlideClient#getSessionById")
+    e.printStackTrace()
+}
+```
+
 ### **initPayment**
 > Payment initPayment(initPaymentRequest)
 
@@ -70,27 +91,6 @@ val payment = client.initPayment(
         ),
     )
 )
-```
-
-# **getSessionById**
-> PaymentSession getSessionById(sessionId)
-
-Find session by ID
-
-Returns the session information
-
-```kotlin
-val sessionId : kotlin.String = sessionId_example // kotlin.String | ID of session to return
-try {
-    val result : PaymentSession = client.getSessionById(sessionId)
-    println(result)
-} catch (e: ClientException) {
-    println("4xx response calling PayGlideClient#getSessionById")
-    e.printStackTrace()
-} catch (e: ServerException) {
-    println("5xx response calling PayGlideClient#getSessionById")
-    e.printStackTrace()
-}
 ```
 
 ### **Payment object with convenience methods**
