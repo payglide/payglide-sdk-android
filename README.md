@@ -2,6 +2,32 @@
 	<h1>PayGlide SDK for Android</h1>
 </div>
 
+[![](https://img.shields.io/badge/license-APACHE2-blue.svg)](https://github.com/awslabs/aws-sdk-kotlin/blob/main/LICENSE)
+[![](https://jitpack.io/v/payglide/payglide-sdk-android.svg)](https://jitpack.io/#payglide/payglide-sdk-android)
+
+## Installation
+
+To get payglide-sdk-android project into your build:
+
+Step 1.
+Add the JitPack repository to your build file
+
+Add it in your root build.gradle at the end of repositories:
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Step 2. Add the dependency
+```groovy
+dependencies {
+    implementation 'com.github.payglide:payglide-sdk-android:0.1.1'
+}
+```
 ## Usage
 
 Import and initialize a client using an **api key**
