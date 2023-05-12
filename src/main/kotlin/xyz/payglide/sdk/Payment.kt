@@ -99,8 +99,8 @@ class Payment(
         return asyncPoll(
             getPaymentSessionFn = paymentApi::getSessionById,
             sessionId = this.sessionId,
-            expectedStatus = PaymentSession.Status.tOKENTRANSFERCOMPLETED,
-            failureStatus = arrayOf(PaymentSession.Status.pAYMENTFAILED),
+            expectedStatus = PaymentSession.Status.TOKEN_TRANSFER_COMPLETED,
+            failureStatus = arrayOf(PaymentSession.Status.PAYMENT_FAILED),
             pollInterval = pollInterval,
             pollTimeout = pollTimeout,
         )

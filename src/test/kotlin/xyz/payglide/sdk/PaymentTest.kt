@@ -20,7 +20,7 @@ internal class PaymentTest {
             amount = AN_AMOUNT,
             currency = A_CURRENCY,
             address = AN_ADDRESS,
-            status = PaymentSession.Status.tOKENTRANSFERCOMPLETED,
+            status = PaymentSession.Status.TOKEN_TRANSFER_COMPLETED,
             transactionHash = A_HASH,
         )
 

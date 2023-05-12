@@ -209,14 +209,16 @@ open class ApiClient(val baseUrl: String) {
         val response: Response = suspendCancellableCoroutine { continuation ->
             val call = client.newCall(request)
             continuation.invokeOnCancellation { call.cancel() }
-            call.enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(e)
-                }
-                override fun onResponse(call: Call, response: Response) {
-                    continuation.resume(response)
-                }
-            },)
+            call.enqueue(
+                object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        continuation.resumeWithException(e)
+                    }
+                    override fun onResponse(call: Call, response: Response) {
+                        continuation.resume(response)
+                    }
+                },
+            )
         }
 
         val accept = response.header(ContentType)?.substringBefore(";")?.lowercase(Locale.getDefault())

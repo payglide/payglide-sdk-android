@@ -1,6 +1,8 @@
 package xyz.payglide.sdk
 
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,8 +18,8 @@ internal class SessionPollerTest {
     private val POLL_INTERVAL = 1L
     private val POLL_TIMEOUT = 10L
     private val A_SESSION_ID = "a session ID"
-    private val FAILURE_STATUS = PaymentSession.Status.pAYMENTFAILED
-    private val COMPLETED_STATUS = PaymentSession.Status.tOKENTRANSFERCOMPLETED
+    private val FAILURE_STATUS = PaymentSession.Status.PAYMENT_FAILED
+    private val COMPLETED_STATUS = PaymentSession.Status.TOKEN_TRANSFER_COMPLETED
 
     @Test
     fun `should return session immediately when status is COMPLETED_STATUS the first time`() = runTest {
@@ -40,9 +42,9 @@ internal class SessionPollerTest {
     fun `should return session only when status is COMPLETED_STATUS`() = runTest {
         val mockGetPaymentSession = mockk<GetPaymentSession>(relaxed = true)
         coEvery { mockGetPaymentSession(A_SESSION_ID) } returnsMany listOf(
-            PaymentSession(status = PaymentSession.Status.pAYMENTINITIATED),
-            PaymentSession(status = PaymentSession.Status.pAYMENTSUCCEEDED),
-            PaymentSession(status = PaymentSession.Status.tOKENTRANSFERINITIATED),
+            PaymentSession(status = PaymentSession.Status.PAYMENT_INITIATED),
+            PaymentSession(status = PaymentSession.Status.PAYMENT_SUCCEEDED),
+            PaymentSession(status = PaymentSession.Status.TOKEN_TRANSFER_INITIATED),
             PaymentSession(status = COMPLETED_STATUS),
         )
 
@@ -61,7 +63,7 @@ internal class SessionPollerTest {
     @Test
     fun `should timeout when no COMPLETED_STATUS status returned`() = runTest {
         val mockGetPaymentSession = mockk<GetPaymentSession>(relaxed = true)
-        coEvery { mockGetPaymentSession(A_SESSION_ID) } returns PaymentSession(status = PaymentSession.Status.pAYMENTINITIATED)
+        coEvery { mockGetPaymentSession(A_SESSION_ID) } returns PaymentSession(status = PaymentSession.Status.PAYMENT_INITIATED)
         try {
             val session = asyncPoll(
                 getPaymentSessionFn = mockGetPaymentSession,
@@ -91,7 +93,7 @@ internal class SessionPollerTest {
                 pollTimeout = POLL_TIMEOUT,
             )
         } catch (exception: SessionFailureStateException) {
-            assertEquals("Session failed with status: pAYMENTFAILED", exception.message)
+            assertEquals("Session failed with status: PAYMENT_FAILED", exception.message)
             coVerify(atLeast = 1) { mockGetPaymentSession.invoke(A_SESSION_ID) }
         }
     }
