@@ -38,6 +38,11 @@ plugins {
 group 'xyz.payglide'
 version '0.1.0'
 
+java {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+
 wrapper {
     gradleVersion = '6.8.3'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
@@ -53,6 +58,11 @@ test {
 }
 
 publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
     repositories {
         mavenLocal()
     }
