@@ -5,7 +5,8 @@ buildscript {
     ext.junit_version = '5.3.1'
 
     repositories {
-        maven { url "https://repo1.maven.org/maven2" }
+        mavenCentral()
+        maven {url "https://jitpack.io" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -31,6 +32,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.8.21"
     id "org.jetbrains.kotlin.plugin.serialization" version "1.8.21"
     id "org.jmailen.kotlinter" version "3.13.0"
+    id "maven-publish"
 }
 
 group 'xyz.payglide'
@@ -43,10 +45,17 @@ wrapper {
 
 repositories {
     mavenCentral()
+    maven {url "https://jitpack.io" }
 }
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
 }
 
 dependencies {
